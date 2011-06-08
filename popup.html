@@ -1,0 +1,73 @@
+<style>
+body {
+    width: 300px;
+    font-size: 12px;
+    font-family: Arial;
+    background-color: #FFF;
+}
+input {
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    padding: 4px;
+    border: 1px solid gray;
+}
+#url {
+    width: 300px;
+}
+#starting, #ending {
+    width: 40px;
+}
+#next {
+    width: 126px;
+}
+</style>
+<body>
+    <div>
+        <span id="important">Place asterix (*)</span> to increase value in URL:
+    </div>
+    <form onsubmit="return bruteforceUrl()">
+        <input type="text" id="url" name="url" value="Updated" />
+        starting from <input type="text" id="starting" value="1" />
+        till <input type="text" id="ending" value="10" />
+        <input type="submit" id="next" value="Open next page" />
+    </form>
+    <script>
+        var current_page = null;
+
+        chrome.tabs.getSelected(null, function(tab) {
+            document.getElementById('url').value = tab.url;
+        })
+
+        function update_current_url() {
+            if (!current_page) {
+                current_page = parseInt(document.getElementById('starting').value) + 1;
+            } else {
+                ++current_page;
+            }
+        }
+
+        function can_move_next() {
+            return current_page < parseInt(document.getElementById('ending').value);
+        }
+
+        function redirect_to_page() {
+            var url = document.getElementById('url').value;
+            if (url.indexOf('*') != -1) {
+                url = url.replace('*', current_page);
+                chrome.tabs.getSelected(null, function(tab) {
+                    chrome.tabs.update(tab.id, {url: url});
+                });
+            } else {
+               document.getElementById('important').style.color = 'red';
+            }
+        }
+
+        function bruteforceUrl() {
+            update_current_url();
+            if (can_move_next()) {
+                redirect_to_page();
+            }
+            return false;
+        }
+    </script>

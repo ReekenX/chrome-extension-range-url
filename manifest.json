@@ -1,0 +1,20 @@
+{
+  "name": "Range URL",
+  "version": "1.0",
+  "description": "Browse specifield range of URL's just increasing number in URL.",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html"
+  },
+  "icons": {
+    "16": "icon.png",
+    "46": "icon.png",
+    "128": "icon.png"
+  },
+  "homepage_url": "http://www.jarmalavicius.lt",
+  "permissions": [
+    "http://*/*",
+    "https://*/*",
+    "tabs"
+  ]
+}
